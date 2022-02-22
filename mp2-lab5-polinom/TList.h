@@ -1,32 +1,7 @@
 #pragma once
-#include <iostream>
-using namespace std;
-
-struct TMonom {
-	double coef;
-	int x, y, z;
-
-	bool operator==(const TMonom& m) {
-		return (x == m.x && y == m.y && z == m.z);
-	}
-	bool operator>(const TMonom& m) {
-		return (x > m.x && y > m.y && z > m.z);
-	}
-	bool operator<(const TMonom& m) {
-		return (x < m.x && y < m.y && z < m.z);
-	}
-	friend ostream& operator<<(ostream& os, const TMonom& m){
-		//printf("coef = %f; x^%d y^%d z^%d\n", m.coef, m.x, m.y, m.z);
-		return os << m.coef << ' ' << "x^" << m.x << ' ' << "y^" << m.y << ' ' << "z^" << m.z << '\n';
-	}
-	friend istream& operator>>(istream& is, TMonom& m) {
-		is >> m.coef >> m.x >> m.y >> m.z;
-		return is;
-	}
-};
 
 template <class T>
-struct TNode{
+struct TNode {
 	T value;
 	TNode* pNext;
 
@@ -34,14 +9,21 @@ struct TNode{
 };
 
 template <class T>
-class TList{
+class TList {
 protected:
-	TNode<T>* pFirst, *pLast, *pStop, *pCurr, *pPrev;
+	TNode<T>* pFirst, * pLast, * pStop, * pCurr, * pPrev;
 	int len;
 
 public:
 	TList() :pFirst(NULL), len(0), pLast(NULL), pStop(NULL), pCurr(NULL), pPrev(NULL) {}
-	
+	~TList() {
+		Reset();
+		while(pCurr != pStop){
+			pPrev = pCurr;
+			pCurr = pCurr->pNext;
+			delete pPrev;
+		}
+	}
 	class iterator
 	{
 		TNode<T>* pCurr;
@@ -68,12 +50,12 @@ public:
 			return pCurr->value;
 		}
 
-		bool operator==(const iterator& iter)
+		bool operator==(const iterator& iter) const
 		{
 			return pCurr == iter.pCurr;
 		}
 
-		bool operator!=(const iterator& iter)
+		bool operator!=(const iterator& iter) const
 		{
 			return !(*this == iter);
 		}
@@ -90,19 +72,15 @@ public:
 		TNode<T>* pNew = new TNode<T>(_value, pFirst);
 		pFirst = pNew;
 		len++;
-		if (len == 1) {
-			pLast = pNew;
-		}
+		if (len == 1) { pLast = pNew; }
 	}
 
 	void InsLast(T _value) {
 		TNode<T>* pNew = new TNode<T>(_value, pStop);
-		if (pLast == pStop) {
+		if (pLast == pStop)
 			pFirst = pNew;
-		}
-		else {
+		else
 			pLast->pNext = pNew;
-		}
 		pLast = pNew;
 		len++;
 		pLast = pNew;
@@ -125,11 +103,48 @@ public:
 		}
 	}
 
-	void DelCur() {
-		if (pCurr == NULL)
-			return;
-		pPrev->pNext = pCurr->pNext;
-		pCurr = pCurr->pNext;
+	void DelCurr() {
+		if (pCurr != pStop) {
+			if (pCurr == pFirst)
+				DelFirst();
+			else
+			{
+				TNode<T>* del = pCurr;
+				pCurr = pCurr->pNext;
+				pPrev->pNext = pCurr;
+				delete del;
+				len--;
+			}
+		}
 	}
 
+	void DelFirst() {
+		if (pFirst != pStop) {
+			TNode<T>* del = pFirst;
+			pFirst = pFirst->pNext;
+			delete del;
+			len--;
+			if (len == 0)
+				pLast = pStop;
+		}
+	}
+
+	T GetCurrVal() {
+		if (pCurr != pStop)
+			return pCurr->value;
+	}
+
+	void Reset() {
+		pCurr = pFirst;
+		pPrev = pStop;
+	}
+
+	void GoNext() {
+		if (pCurr != pStop) {
+			pPrev = pCurr;
+			pCurr = pCurr->pNext;
+		}
+	}
+
+	bool IsEnd() { return pCurr == pStop; }
 };

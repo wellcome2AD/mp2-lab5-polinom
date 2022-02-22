@@ -19,7 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Новая папка\mp2-lab5-polinom\TList.h" />
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="THeadList.h" />
+    <ClInclude Include="TList.h" />
+    <ClInclude Include="TMonom.h" />
+    <ClInclude Include="TPolinom.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
