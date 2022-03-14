@@ -5,7 +5,7 @@ struct TNode {
 	T value;
 	TNode* pNext;
 
-	TNode(const T& _val, TNode* next = NULL) : value(_val), pNext(next) {}
+	TNode(const T& _val = T(), TNode* next = NULL) : value(_val), pNext(next) {}
 };
 
 template <class T>
@@ -14,8 +14,40 @@ protected:
 	TNode<T>* pFirst, * pLast, * pStop, * pCurr, * pPrev;
 	int len;
 
+protected:
+	virtual void nulify()
+	{
+		pFirst = pLast = pStop = pCurr = pPrev = nullptr;
+		len = 0;
+	}
+
 public:
 	TList() :pFirst(NULL), len(0), pLast(NULL), pStop(NULL), pCurr(NULL), pPrev(NULL) {}
+	
+	TList(const TList& theList) : TList()
+	{
+		for (TNode<T>* aCurrent = theList.pFirst;
+			 aCurrent != theList.pStop;
+			 aCurrent = aCurrent->pNext)
+		{
+			InsLast(aCurrent->value);
+		}
+	}
+
+	TList& operator=(TList theList)
+	{
+		pFirst = theList.pFirst;
+		pLast = theList.pLast;
+		pStop = theList.pStop;
+		pCurr = theList.pCurr;
+		pPrev = theList.pPrev;
+		len = theList.len;
+
+		theList.nulify();
+
+		return *this;
+	}
+	
 	~TList() {
 		Reset();
 		while(pCurr != pStop){
@@ -89,15 +121,19 @@ public:
 	void InsCurr(T _value) {
 		if (pCurr == pFirst) {
 			InsFirst(_value);
+			pPrev = pStop;
 			pCurr = pFirst;
 		}
-		else if (pCurr == pLast) {
+		else if (pPrev == pLast) {
 			InsLast(_value);
-			pCurr = pLast;
+			pPrev = pLast;
 		}
 		else {
 			TNode<T>* pNew = new TNode<T>(_value, pCurr);
-			pPrev->pNext = pNew;
+			if (pPrev != nullptr)
+			{
+				pPrev->pNext = pNew;
+			}
 			pCurr = pNew;
 			len++;
 		}
@@ -146,5 +182,5 @@ public:
 		}
 	}
 
-	bool IsEnd() { return pCurr == pStop; }
+	bool IsEnd() const { return pCurr == pStop; }
 };

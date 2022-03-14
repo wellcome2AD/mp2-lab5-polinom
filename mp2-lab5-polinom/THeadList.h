@@ -5,23 +5,73 @@ template <class T>
 class THeadList : public TList<T> {
 protected:
 	TNode<T>* pHead;
-public:
-	THeadList(){
-		pHead = new TNode<T>;
+private:
+	void initialize()
+	{
+		pHead = new TNode<T>();
 		pHead->pNext = pHead;
 		TList<T>::pStop = pHead; //? это и ниже - не его поля, а "родителя"
-		pLast = pFirst = pHead;
-		pCurr = pPrev = pHead;
-		len = 0; //? конструктор родителя проинициализирует нулём
+		TList<T>::pLast = TList<T>::pFirst = pHead;
+		TList<T>::pCurr = TList<T>::pPrev = pHead;
+		TList<T>::len = 0; //? конструктор родителя проинициализирует нулём
 	} //нужно ли явно вызывать конструктор TList<T>?
 
-	~THeadList() { delete pHead; }
+protected:
+	virtual void nulify() override
+	{
+		__super::nulify();
+		pHead = nullptr;
+	}
+public:
+	THeadList() {
+		initialize();
+	}
+
+
+	THeadList(const THeadList& theList)
+		: TList<T>::TList(theList)
+	{
+		pHead = new TNode<T>();
+		TList<T>::pStop = pHead;
+		TList<T>::pCurr /*= TList<T>::pPrev*/ = pHead;
+		TList<T>::pPrev = nullptr;
+
+		pHead->pNext = TList<T>::pFirst;
+		if (TList<T>::pLast != NULL)
+			TList<T>::pLast->pNext = TList<T>::pStop;
+
+		pHead->value = theList.pHead->value;
+	}
+
+	THeadList& operator=(THeadList theList)
+	{
+		TList<T>::pFirst = theList.pFirst;
+		TList<T>::pLast = theList.pLast;
+		TList<T>::pStop = theList.pStop;
+		TList<T>::pCurr = theList.pCurr;
+		TList<T>::pPrev = theList.pPrev;
+		TList<T>::len = theList.len;
+
+
+		pHead = theList.pHead;
+
+		theList.nulify();
+
+		return *this;
+	}
+
+	~THeadList() {
+		TList<T>::pStop = nullptr;
+		if (TList<T>::pLast != nullptr)
+			TList<T>::pLast->pNext = TList<T>::pStop;
+		delete pHead;
+	}
 	void InsFirst(T val) {
 		TList<T>::InsFirst(val);
-		pHead->pNext = pFirst;
+		pHead->pNext = TList<T>::pFirst;
 	}
 	void DelFirst() {
 		TList<T>::DelFirst();
-		pHead->pNext = pFirst;
+		pHead->pNext = TList<T>::pFirst;
 	}
 };
