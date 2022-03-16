@@ -10,11 +10,12 @@ private:
 	{
 		pHead = new TNode<T>();
 		pHead->pNext = pHead;
-		TList<T>::pStop = pHead; //? это и ниже - не его поля, а "родителя"
+		TList<T>::pStop = pHead;
 		TList<T>::pLast = TList<T>::pFirst = pHead;
-		TList<T>::pCurr = TList<T>::pPrev = pHead;
-		TList<T>::len = 0; //? конструктор родителя проинициализирует нулём
-	} //нужно ли явно вызывать конструктор TList<T>?
+		TList<T>::pCurr = pHead;
+		TList<T>::pPrev = nullptr;
+		TList<T>::len = 0;
+	}
 
 protected:
 	virtual void nulify() override
@@ -26,8 +27,20 @@ public:
 	THeadList() {
 		initialize();
 	}
-
-
+	~THeadList() {
+		TList<T>::pStop = nullptr;
+		if (TList<T>::pLast != nullptr)
+			TList<T>::pLast->pNext = TList<T>::pStop;
+		if (pHead != nullptr) {
+			if (pHead->pNext == pHead) {
+				TList<T>::pFirst = TList<T>::pLast = nullptr;
+			}
+			else {
+				TList<T>::pFirst = pHead->pNext;
+			}
+		}
+		delete pHead;
+	}
 	THeadList(const THeadList& theList)
 		: TList<T>::TList(theList)
 	{
@@ -58,13 +71,6 @@ public:
 		theList.nulify();
 
 		return *this;
-	}
-
-	~THeadList() {
-		TList<T>::pStop = nullptr;
-		if (TList<T>::pLast != nullptr)
-			TList<T>::pLast->pNext = TList<T>::pStop;
-		delete pHead;
 	}
 	void InsFirst(T val) {
 		TList<T>::InsFirst(val);

@@ -33,7 +33,14 @@ public:
 			InsLast(aCurrent->value);
 		}
 	}
-
+	~TList() {
+		Reset();
+		while (pCurr != pStop) {
+			pPrev = pCurr;
+			pCurr = pCurr->pNext;
+			delete pPrev;
+		}
+	}
 	TList& operator=(TList theList)
 	{
 		pFirst = theList.pFirst;
@@ -46,15 +53,6 @@ public:
 		theList.nulify();
 
 		return *this;
-	}
-	
-	~TList() {
-		Reset();
-		while(pCurr != pStop){
-			pPrev = pCurr;
-			pCurr = pCurr->pNext;
-			delete pPrev;
-		}
 	}
 	class iterator
 	{

@@ -6,12 +6,15 @@
 #include <string>
 
 class TPolinom : public THeadList<TMonom> {
+private :
+	void InsFirst(TMonom value) { return __super::InsFirst(value); }
+	void InsLast(TMonom value) { return __super::InsLast(value); }
+	void InsCurr(TMonom value) { return __super::InsCurr(value); }
 public:
 	TPolinom() {
 		TMonom m;
 		pHead->value = m;
 	}
-
 	void AddMonom(const TMonom m) {
 		if (pLast->value > m) {
 			InsLast(m);
@@ -32,7 +35,6 @@ public:
 
 		InsFirst(m);
 	}
-
 	TPolinom operator+(TPolinom pol) const
 	{
 		TPolinom res = *this;
@@ -65,7 +67,21 @@ public:
 		}
 		return res;
 	}
-
+	template <class T>
+	TPolinom operator*(T coef) const
+	{
+		if (coef == 0)
+			return TPolinom();
+		TPolinom res(*this);
+		for (res.Reset(); !res.IsEnd(); res.GoNext()) {
+			res.pCurr->value *= coef;
+		}
+		return res;
+	}
+	template <class T>
+	TPolinom& operator*=(T coef) {
+		return *this = *this * coef;
+	}
 	friend std::istream& operator>>(std::istream& in, TPolinom& pol)
 	{
 		std::string str; //строка для считывания
@@ -86,9 +102,10 @@ public:
 		}
 		return in;
 	}
-
 	friend std::ostream& operator<<(std::ostream& out, const TPolinom& pol)
 	{
+		if (pol.len == 0)
+			return out << 0;
 		if (pol.pFirst != nullptr)
 		{
 			out << pol.pFirst->value;
@@ -98,8 +115,7 @@ public:
 				out << (current->value.coef >= 0 ? " + " : "");
 				out << current->value;
 			}
-		}
-		
+		}		
 		return out;
 	}
 
