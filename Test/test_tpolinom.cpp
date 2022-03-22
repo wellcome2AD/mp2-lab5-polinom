@@ -24,35 +24,7 @@ TEST(TPolinom, can_add_monom)
 	ASSERT_EQ(polinom, "1*x^2*y^3*z^4");
 }
 
-/*TEST(TPolinom, can_insert_first)
-{
-	TPolinom polinom;
-	TMonom monom(1, 2, 3, 4);
-	polinom.AddMonom(monom);
-	monom = {-5, 6, 7, 8};
-	polinom.InsFirst(monom);
-	ASSERT_EQ(polinom, "-5*x^6*y^7*z^8 + 1*x^2*y^3*z^4");
-}
-
-TEST(TPolinom, can_insert_current)
-{
-	TPolinom polinom;
-	TMonom monom(1, 2, 3, 4);
-	polinom.InsCurr(monom);
-	ASSERT_EQ(polinom, "1*x^2*y^3*z^4 - 5*x^6*y^7*z^8");
-}
-
-TEST(TPolinom, can_insert_last)
-{
-	TPolinom polinom;
-	TMonom monom(1, 2, 3, 4);
-	polinom.InsLast(monom);
-	polinom.GoNext();
-	ASSERT_EQ(polinom.GetCurrVal(), monom);
-}
-*/
-
-TEST(TPolinom, can_copy_polinom)
+TEST(TPolinom, can_copy_polinom_with_one_monom)
 {
 	TPolinom polinom;
 	TMonom monom(1, 2, 3, 4);
@@ -60,13 +32,38 @@ TEST(TPolinom, can_copy_polinom)
 	ASSERT_EQ(TPolinom(polinom), "1*x^2*y^3*z^4");
 }
 
-TEST(TPolinom, can_sum_polinoms)
+TEST(TPolinom, can_copy_polinom_with_several_monoms)
+{
+	TPolinom polinom;
+	polinom.AddMonom(TMonom(1, 2, 3, 4));
+	polinom.AddMonom(TMonom(4, 5, 0, 9));
+	polinom.AddMonom(TMonom(-7, 3, 2, 7));
+	ASSERT_EQ(TPolinom(polinom), "4*x^5*z^9-7*x^3*y^2*z^7 + 1*x^2*y^3*z^4");
+}
+
+TEST(TPolinom, can_sum_polinoms_with_one_monom)
 {
 	TPolinom polinom1, polinom2;
 	polinom1.AddMonom(TMonom(1, 2, 3, 4));
 	polinom2.AddMonom(TMonom(-1, 2, 3, 4));
 	TPolinom polinom3 = polinom1 + polinom2;
 	ASSERT_EQ(polinom3, "0");
+}
+
+TEST(TPolinom, can_sum_polinoms_with_several_monoms)
+{
+	TPolinom polinom1, polinom2;
+	polinom1.AddMonom(TMonom(4, 5, 1, 9));
+	polinom1.AddMonom(TMonom(3, 3, 0, 2));
+	polinom1.AddMonom(TMonom(1, 2, 3, 4));
+
+	polinom2.AddMonom(TMonom(-7, 3, 2, 7));
+	polinom2.AddMonom(TMonom(-8, 3, 0, 7));
+	polinom2.AddMonom(TMonom(-1, 2, 3, 4));
+
+	TPolinom polinom3 = polinom1 + polinom2;
+
+	ASSERT_EQ(polinom3, "4*x^5*y^1*z^9-7*x^3*y^2*z^7-8*x^3*z^7 + 3*x^3*z^2");
 }
 
 TEST(TPolinom, can_mul_by_num)

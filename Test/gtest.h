@@ -48,6 +48,7 @@
 // registration from Barthelemy Dagenais' (barthelemy@prologique.com)
 // easyUnit framework.
 
+#define _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING
 #define _VARIADIC_MAX 10
 
 #ifndef GTEST_INCLUDE_GTEST_GTEST_H_

@@ -10,11 +10,11 @@ private:
 	{
 		pHead = new TNode<T>();
 		pHead->pNext = pHead;
-		TList<T>::pStop = pHead;
-		TList<T>::pLast = TList<T>::pFirst = pHead;
-		TList<T>::pCurr = pHead;
-		TList<T>::pPrev = nullptr;
-		TList<T>::len = 0;
+		pStop = pHead;
+		pLast = pFirst = pHead;
+		pCurr = pHead;
+		pPrev = nullptr;
+		len = 0;
 	}
 
 protected:
@@ -40,6 +40,7 @@ public:
 			}
 		}
 		delete pHead;
+		pFirst = pStop;
 	}
 	THeadList(const THeadList& theList)
 		: TList<T>::TList(theList)
