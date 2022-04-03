@@ -33,6 +33,7 @@ public:
 			InsLast(aCurrent->value);
 		}
 	}
+	
 	~TList() {
 		Reset();
 		while (pCurr != pStop) {
@@ -41,6 +42,7 @@ public:
 			delete pPrev;
 		}
 	}
+	
 	TList& operator=(TList theList)
 	{
 		pFirst = theList.pFirst;
@@ -54,50 +56,7 @@ public:
 
 		return *this;
 	}
-	class iterator
-	{
-		TNode<T>* pCurr;
-	public:
-		iterator() {}
-		iterator(const iterator& iter) : pCurr(iter.pCurr) {}
-		iterator& operator=(const iterator& iter) { pCurr = iter.pCurr; }
-
-		iterator& operator++() // prefix
-		{
-			pCurr = pCurr->pNext;
-			return *this;
-		}
-
-		iterator operator++(int) // postfix
-		{
-			iterator iter = *this;
-			++(*this);
-			return iter;
-		}
-
-		T& operator*()
-		{
-			return pCurr->value;
-		}
-
-		bool operator==(const iterator& iter) const
-		{
-			return pCurr == iter.pCurr;
-		}
-
-		bool operator!=(const iterator& iter) const
-		{
-			return !(*this == iter);
-		}
-
-		friend TList;
-	private:
-		iterator(TNode<T>* current) : pCurr(current) {}
-	};
-
-	iterator begin() { iterator iter(pFirst); return iter; }
-	iterator end() { return iterator(pStop); }
-
+	
 	void InsFirst(T _value) {
 		TNode<T>* pNew = new TNode<T>(_value, pFirst);
 		pFirst = pNew;
@@ -143,11 +102,17 @@ public:
 				DelFirst();
 			else
 			{
+				if (pCurr == pLast)
+				{
+					pLast = pPrev;
+				}
+
 				TNode<T>* del = pCurr;
 				pCurr = pCurr->pNext;
 				pPrev->pNext = pCurr;
 				delete del;
 				len--;
+				
 			}
 		}
 	}

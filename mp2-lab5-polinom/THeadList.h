@@ -27,6 +27,7 @@ public:
 	THeadList() {
 		initialize();
 	}
+	
 	~THeadList() {
 		TList<T>::pStop = nullptr;
 		if (TList<T>::pLast != nullptr)
@@ -40,31 +41,32 @@ public:
 			}
 		}
 		delete pHead;
-		pFirst = pStop;
+		//pFirst = pStop;
 	}
+	
 	THeadList(const THeadList& theList)
 		: TList<T>::TList(theList)
 	{
 		pHead = new TNode<T>();
-		TList<T>::pStop = pHead;
-		TList<T>::pCurr /*= TList<T>::pPrev*/ = pHead;
-		TList<T>::pPrev = nullptr;
+		pStop = pHead;
+		pCurr /*= pPrev*/ = pHead;
+		pPrev = nullptr;
 
-		pHead->pNext = TList<T>::pFirst;
-		if (TList<T>::pLast != NULL)
-			TList<T>::pLast->pNext = TList<T>::pStop;
+		pHead->pNext = pFirst;
+		if (pLast != NULL)
+			pLast->pNext = pStop;
 
 		pHead->value = theList.pHead->value;
 	}
 
 	THeadList& operator=(THeadList theList)
 	{
-		TList<T>::pFirst = theList.pFirst;
-		TList<T>::pLast = theList.pLast;
-		TList<T>::pStop = theList.pStop;
-		TList<T>::pCurr = theList.pCurr;
-		TList<T>::pPrev = theList.pPrev;
-		TList<T>::len = theList.len;
+		pFirst = theList.pFirst;
+		pLast = theList.pLast;
+		pStop = theList.pStop;
+		pCurr = theList.pCurr;
+		pPrev = theList.pPrev;
+		len = theList.len;
 
 
 		pHead = theList.pHead;
@@ -73,10 +75,12 @@ public:
 
 		return *this;
 	}
+	
 	void InsFirst(T val) {
 		TList<T>::InsFirst(val);
 		pHead->pNext = TList<T>::pFirst;
 	}
+	
 	void DelFirst() {
 		TList<T>::DelFirst();
 		pHead->pNext = TList<T>::pFirst;

@@ -15,6 +15,7 @@ public:
 		TMonom m;
 		pHead->value = m;
 	}
+	
 	void AddMonom(const TMonom m) {
 		if (pLast->value > m) {
 			InsLast(m);
@@ -35,6 +36,7 @@ public:
 
 		InsFirst(m);
 	}
+	
 	TPolinom operator+(TPolinom pol) const
 	{
 		TPolinom res = *this;
@@ -67,6 +69,7 @@ public:
 		}
 		return res;
 	}
+	
 	template <class T>
 	TPolinom operator*(T coef) const
 	{
@@ -78,10 +81,12 @@ public:
 		}
 		return res;
 	}
+	
 	template <class T>
 	TPolinom& operator*=(T coef) {
 		return *this = *this * coef;
 	}
+	
 	friend std::istream& operator>>(std::istream& in, TPolinom& pol)
 	{
 		std::string str; //строка для считывания
@@ -102,6 +107,7 @@ public:
 		}
 		return in;
 	}
+	
 	friend std::ostream& operator<<(std::ostream& out, const TPolinom& pol)
 	{
 		if (pol.len == 0)
@@ -112,7 +118,7 @@ public:
 			
 			for (auto current = pol.pFirst->pNext; current != pol.pStop; current = current->pNext)
 			{
-				out << (current->value.coef >= 0 ? " + " : "");
+				out << (current->value.coef >= 0 ? "+" : "");
 				out << current->value;
 			}
 		}		
