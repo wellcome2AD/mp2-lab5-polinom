@@ -16,7 +16,7 @@ public:
 		pHead->value = m;
 	}
 	
-	void AddMonom(const TMonom m) {
+	void AddMonom(const TMonom& m) {
 		if (pLast->value > m) {
 			InsLast(m);
 			return;

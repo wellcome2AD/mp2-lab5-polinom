@@ -45,11 +45,11 @@ struct TMonom {
 		int arr2[] = { m.x, m.y, m.z };
 		return intcmp(arr1, arr2, sizeof(arr1) / sizeof(int)) < 0;
 	}
-	TMonom operator*(double coef)
+	TMonom operator*(double coef) const
 	{
 		return TMonom(this->coef * coef, x, y, z);
 	}
-	TMonom operator*(TMonom monom)
+	TMonom operator*(const TMonom& monom) const
 	{
 		return TMonom(coef * monom.coef, x + monom.x, y + monom.y, z + monom.z);
 	}

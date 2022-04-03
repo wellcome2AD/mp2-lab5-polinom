@@ -22,7 +22,7 @@ protected:
 	}
 
 public:
-	TList() :pFirst(NULL), len(0), pLast(NULL), pStop(NULL), pCurr(NULL), pPrev(NULL) {}
+	TList() :pFirst(nullptr), len(0), pLast(nullptr), pStop(nullptr), pCurr(nullptr), pPrev(nullptr) {}
 	
 	TList(const TList& theList) : TList()
 	{
@@ -72,7 +72,6 @@ public:
 			pLast->pNext = pNew;
 		pLast = pNew;
 		len++;
-		pLast = pNew;
 	}
 
 	void InsCurr(T _value) {

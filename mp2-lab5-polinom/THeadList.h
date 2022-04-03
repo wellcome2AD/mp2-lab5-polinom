@@ -47,16 +47,16 @@ public:
 	THeadList(const THeadList& theList)
 		: TList<T>::TList(theList)
 	{
-		pHead = new TNode<T>();
+		pHead = new TNode<T>(theList.pHead->value, pFirst);
 		pStop = pHead;
 		pCurr /*= pPrev*/ = pHead;
 		pPrev = nullptr;
 
-		pHead->pNext = pFirst;
+		//pHead->pNext = pFirst;
+		//pHead->value = theList.pHead->value;
+
 		if (pLast != NULL)
 			pLast->pNext = pStop;
-
-		pHead->value = theList.pHead->value;
 	}
 
 	THeadList& operator=(THeadList theList)
